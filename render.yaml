@@ -1,0 +1,13 @@
+# Blueprint de Render para el backend .NET (plan gratis).
+# En Render: New > Blueprint > conecta este repo y se despliega solo.
+services:
+  - type: web
+    name: taller-api
+    runtime: docker
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    plan: free
+    autoDeploy: true
+    envVars:
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production
