@@ -80,8 +80,30 @@ la base con `pg_dump` o las herramientas de Neon.
 El plan gratuito de Render puede dormir por inactividad; la primera visita
 puede tardar en responder. La persistencia de Neon no evita esa espera.
 
-Este MVP todavía no implementa autenticación: el selector Admin 1/Admin 2 es
-una etiqueta de auditoría, no un inicio de sesión. Usar datos ficticios en el
-piloto hasta incorporar control de acceso. Para recoger feedback, compartir
-el enlace con quienes prueban el flujo y registrar los problemas sin datos
-personales en los issues del repositorio.
+## Acceso de administrador
+
+La interfaz exige usuario y clave. Las órdenes, historial, checklist, cotizaciones
+y PDFs requieren una sesión con rol `Admin`; no existe registro público de usuarios.
+El rol Admin permite todas las operaciones actuales del taller.
+
+Para aprovisionar un administrador por primera vez, configurar temporalmente
+`Admin__Username` y `Admin__Password` en las variables privadas de Render y
+desplegar. La clave se guarda como hash PBKDF2 de ASP.NET Core Identity en Neon.
+Después de verificar el acceso, quitar `Admin__Password` de Render; no hace falta
+para los siguientes arranques. Si el usuario ya existe, el arranque no modifica
+su clave ni su rol. No guardar claves en Git ni en variables `NEXT_PUBLIC_*`.
+
+El navegador usa `/api` en el mismo dominio de Vercel; Next.js lo reenvía al
+backend configurado en `API_PROXY_TARGET` (o el anterior `NEXT_PUBLIC_API_BASE`).
+Las cookies de sesión son HttpOnly, SameSite=Lax y Secure en producción. Las
+peticiones de escritura requieren `X-Taller-Request: 1`. El login limita intentos.
+El usuario de auditoría se obtiene de la sesión y no del valor enviado por el cliente.
+
+Las sesiones duran hasta ocho horas con renovación mientras se usan. Un reinicio
+de Render puede invalidarlas porque las claves de protección de cookies están en
+su disco temporal: basta volver a entrar; los usuarios y las órdenes permanecen
+en Neon. Para varias instancias habrá que persistir esas claves y compartirlas.
+La tabla `Usuarios` se agrega de forma idempotente a las bases anteriores del MVP.
+
+Para recoger feedback, compartir el enlace con quienes prueban el flujo y registrar
+los problemas sin datos personales en los issues del repositorio.

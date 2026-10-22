@@ -7,23 +7,32 @@ import type {
   ItemFactura,
 } from "./types";
 
-export const API_BASE =
-  process.env.NEXT_PUBLIC_API_BASE ?? "http://localhost:5142";
+export const API_BASE = "";
 
 async function http<T>(path: string, init?: RequestInit): Promise<T> {
   const res = await fetch(`${API_BASE}${path}`, {
     ...init,
-    headers: { "Content-Type": "application/json", ...(init?.headers ?? {}) },
+    headers: { "Content-Type": "application/json", "X-Taller-Request": "1", ...(init?.headers ?? {}) },
     cache: "no-store",
   });
   if (!res.ok) {
+    if (res.status === 401 && path !== "/api/auth/login" && typeof window !== "undefined")
+      window.dispatchEvent(new Event("taller:unauthorized"));
+    if (res.status === 429) throw new Error("Demasiados intentos. Espera un minuto e intenta otra vez.");
     const text = await res.text().catch(() => "");
-    throw new Error(text || `Error ${res.status}`);
+    let message = text;
+    try { message = JSON.parse(text).message ?? text; } catch {}
+    throw new Error(message || `Error ${res.status}`);
   }
   return res.json() as Promise<T>;
 }
 
 export const api = {
+  login: (username: string, password: string) => http<{ username: string; role: string }>("/api/auth/login", {
+    method: "POST", body: JSON.stringify({ username, password }),
+  }),
+  me: () => http<{ username: string; role: string }>("/api/auth/me"),
+  logout: () => http<{ ok: boolean }>("/api/auth/logout", { method: "POST" }),
   listarOrdenes: (estado?: EstadoOrden) =>
     http<OrdenResumen[]>(`/api/ordenes${estado ? `?estado=${estado}` : ""}`),
 
