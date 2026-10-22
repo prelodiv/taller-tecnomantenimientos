@@ -12,9 +12,11 @@ public class TallerDbContext : DbContext
     public DbSet<OrdenServicio> Ordenes => Set<OrdenServicio>();
     public DbSet<OrdenChecklist> Checklist => Set<OrdenChecklist>();
     public DbSet<ItemFactura> Items => Set<ItemFactura>();
+    public DbSet<Usuario> Usuarios => Set<Usuario>();
 
     protected override void OnModelCreating(ModelBuilder b)
     {
+        b.Entity<Usuario>().HasKey(u => u.Username);
         b.Entity<Vehiculo>().HasIndex(v => v.Placa);
         b.Entity<ItemFactura>().Property(i => i.Cantidad).HasPrecision(18, 2);
         b.Entity<ItemFactura>().Property(i => i.ValorUnitario).HasPrecision(18, 2);

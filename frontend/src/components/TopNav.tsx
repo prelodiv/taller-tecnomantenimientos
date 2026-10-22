@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Logo } from "./Logo";
-import { useUsuario, USUARIOS } from "./UsuarioProvider";
+import { useUsuario } from "./UsuarioProvider";
 
 const links = [
   { href: "/", label: "Tablero" },
@@ -13,7 +13,7 @@ const links = [
 
 export function TopNav() {
   const path = usePathname();
-  const { usuario, setUsuario } = useUsuario();
+  const { usuario, salir } = useUsuario();
   const isActive = (href: string) =>
     href === "/" ? path === "/" : path.startsWith(href);
 
@@ -38,18 +38,10 @@ export function TopNav() {
   const userPicker = (
     <div className="flex items-center gap-2 shrink-0">
       <span className="w-7 h-7 rounded-full bg-brand/20 border border-brand/40 text-brand text-xs font-bold grid place-items-center">
-        {usuario.replace("Admin ", "A")}
+        {usuario.slice(0, 2).toUpperCase()}
       </span>
-      <select
-        value={usuario}
-        onChange={(e) => setUsuario(e.target.value)}
-        className="bg-surface-2 border border-border rounded-md px-2 py-1.5 text-sm outline-none focus:border-brand cursor-pointer"
-        title="Usuario activo"
-      >
-        {USUARIOS.map((u) => (
-          <option key={u} value={u}>{u}</option>
-        ))}
-      </select>
+      <span className="text-sm">{usuario}<span className="block text-xs text-muted">Administrador</span></span>
+      <button type="button" onClick={salir} className="text-sm border border-border rounded-md px-2 py-1.5 hover:bg-surface-2">Salir</button>
     </div>
   );
 

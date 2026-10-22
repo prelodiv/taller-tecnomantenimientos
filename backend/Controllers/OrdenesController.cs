@@ -111,7 +111,7 @@ public class OrdenesController : ControllerBase
         var o = await CargarCompleta(id);
         if (o is null) return NotFound();
         o.Estado = req.Estado;
-        o.UltimoEstadoPor = string.IsNullOrWhiteSpace(req.Usuario) ? "Sistema" : req.Usuario;
+        o.UltimoEstadoPor = User.Identity!.Name;
         o.UltimoEstadoEn = DateTime.UtcNow;
         await _db.SaveChangesAsync();
         return o.ToDetalle();
