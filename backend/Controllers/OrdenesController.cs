@@ -112,7 +112,7 @@ public class OrdenesController : ControllerBase
         if (o is null) return NotFound();
         o.Estado = req.Estado;
         o.UltimoEstadoPor = string.IsNullOrWhiteSpace(req.Usuario) ? "Sistema" : req.Usuario;
-        o.UltimoEstadoEn = DateTime.Now;
+        o.UltimoEstadoEn = DateTime.UtcNow;
         await _db.SaveChangesAsync();
         return o.ToDetalle();
     }
@@ -183,7 +183,7 @@ public class OrdenesController : ControllerBase
 
     private async Task<string> SiguienteNumero()
     {
-        var anio = DateTime.Now.Year;
+        var anio = DateTime.UtcNow.Year;
         var count = await _db.Ordenes.CountAsync(o => o.FechaIngreso.Year == anio);
         return $"OT-{anio}-{(count + 1):D4}";
     }

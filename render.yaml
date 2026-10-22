@@ -1,4 +1,4 @@
-# Blueprint de Render para el backend .NET (plan gratis).
+# Backend gratis en Render + base PostgreSQL persistente externa (Neon).
 # En Render: New > Blueprint > conecta este repo y se despliega solo.
 services:
   - type: web
@@ -8,6 +8,13 @@ services:
     dockerContext: ./backend
     plan: free
     autoDeploy: true
+    healthCheckPath: /health
     envVars:
       - key: ASPNETCORE_ENVIRONMENT
         value: Production
+      - key: Database__Provider
+        value: Postgres
+      - key: Database__SeedDemo
+        value: "false"
+      - key: ConnectionStrings__Postgres
+        sync: false

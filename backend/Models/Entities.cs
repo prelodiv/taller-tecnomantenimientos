@@ -37,7 +37,7 @@ public class OrdenServicio
 {
     public int Id { get; set; }
     public string Numero { get; set; } = "";          // consecutivo legible, ej OT-2026-0001
-    public DateTime FechaIngreso { get; set; } = DateTime.Now;
+    public DateTime FechaIngreso { get; set; } = DateTime.UtcNow;
     public int Kilometraje { get; set; }
     public EstadoOrden Estado { get; set; } = EstadoOrden.Recibido;
     public string? DescripcionExtras { get; set; }     // "suena raro al arrancar"
