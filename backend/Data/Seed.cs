@@ -22,13 +22,13 @@ public static class Seed
         {
             Numero = "OT-2026-0001",
             Vehiculo = carro,
-            FechaIngreso = DateTime.Now.AddMonths(-3),
+            FechaIngreso = DateTime.UtcNow.AddMonths(-3),
             Kilometraje = 78400,
             Estado = EstadoOrden.Entregado,
             DescripcionExtras = "Cliente reporta chillido al frenar.",
             NivelCombustible = "1/2",
             UltimoEstadoPor = "Admin 1",
-            UltimoEstadoEn = DateTime.Now.AddMonths(-3).AddHours(6),
+            UltimoEstadoEn = DateTime.UtcNow.AddMonths(-3).AddHours(6),
         };
         histo.Checklist.Add(new OrdenChecklist { Nombre = "Cambio de aceite", Marcado = true, Completado = true });
         histo.Checklist.Add(new OrdenChecklist { Nombre = "Cambio de pastillas de freno", Marcado = true, Completado = true });
@@ -43,13 +43,13 @@ public static class Seed
         {
             Numero = "OT-2026-0002",
             Vehiculo = moto,
-            FechaIngreso = DateTime.Now.AddDays(-1),
+            FechaIngreso = DateTime.UtcNow.AddDays(-1),
             Kilometraje = 31200,
             Estado = EstadoOrden.EnTrabajo,
             DescripcionExtras = "Suena raro al arrancar, posible problema en la cadena.",
             NivelCombustible = "Lleno",
             UltimoEstadoPor = "Admin 2",
-            UltimoEstadoEn = DateTime.Now.AddHours(-3),
+            UltimoEstadoEn = DateTime.UtcNow.AddHours(-3),
         };
         actual.Checklist.Add(new OrdenChecklist { Nombre = "Cambio de aceite", Marcado = true, Completado = true });
         actual.Checklist.Add(new OrdenChecklist { Nombre = "Revisión de correa / cadena", Marcado = true, Completado = false });
@@ -62,7 +62,7 @@ public static class Seed
         {
             Numero = "OT-2026-0003",
             Vehiculo = camioneta,
-            FechaIngreso = DateTime.Now.AddHours(-2),
+            FechaIngreso = DateTime.UtcNow.AddHours(-2),
             Kilometraje = 54300,
             Estado = EstadoOrden.Recibido,
             NivelCombustible = "1/4",
